@@ -1,0 +1,27 @@
+<!doctype html>
+<title>Chatbot</title>
+<style>
+p.user {
+  background-color: whitesmoke;
+}
+p.user::before {
+  content: "{{ user }}: ";
+  font-weight: bold;
+}
+
+p.chatbot {
+  background-color: lightgray;
+}
+p.chatbot::before {
+  content: "Chatbot: ";
+  font-weight: bold;
+}
+</style>
+{% for item in history %}
+  <p class={{ "user" if item.by_user else "chatbot" }}>{{ item.text }}</p>
+{% endfor %}
+<form method=POST action=/>
+  {{ form.csrf_token }}
+  {{ form.reply.label }} {{ form.reply(size=20) }}
+  <input type=submit value=Odeslat>
+</form>
