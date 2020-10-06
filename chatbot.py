@@ -2,7 +2,7 @@ import secrets
 from pathlib import Path
 from datetime import datetime
 
-from flask import Flask, session, render_template, redirect, url_for
+from flask import Flask, session, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField
@@ -41,33 +41,27 @@ def index():
     else:
         user = User()
         db.session.add(user)
+        # need to commit here so that the new user gets assigned an id
         db.session.commit()
         session["user_id"] = user.id
 
     form = ChatForm()
     if form.validate_on_submit():
-        # the user has just submitted the form -> take note of their
-        # reply
+        # the user has submitted the form -> take note of their reply
         reply = form.reply.data
-        print(reply)
+        form = ChatForm(formdata=None)
         if user.name is None:
             user.name = reply
             db.session.add(user)
         turn = Turn(text=reply, user=user, by_user=True)
         db.session.add(turn)
-        db.session.commit()
-        return redirect(url_for("index"))
 
-    else:
-        # the user is waiting for a reaction from the chatbot
-        chatbot_turn = Turn(
-            text=next_chatbot_turn(user.replies), user=user, by_user=False
-        )
-        db.session.add(chatbot_turn)
-        db.session.commit()
-        return render_template(
-            "index.html", user=user.name, history=user.replies, form=form
-        )
+    chatbot_turn = Turn(text=next_chatbot_turn(user.replies), user=user, by_user=False)
+    db.session.add(chatbot_turn)
+    db.session.commit()
+    return render_template(
+        "index.html", user=user.name, history=user.replies, form=form
+    )
 
 
 def next_chatbot_turn(history):

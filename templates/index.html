@@ -1,5 +1,6 @@
 <!doctype html>
 <title>Chatbot</title>
+
 <style>
 p.user {
   background-color: whitesmoke;
@@ -17,11 +18,21 @@ p.chatbot::before {
   font-weight: bold;
 }
 </style>
+
 {% for item in history %}
   <p class={{ "user" if item.by_user else "chatbot" }}>{{ item.text }}</p>
 {% endfor %}
-<form method=POST action=/>
+<form id="form" method=POST action=/>
   {{ form.csrf_token }}
   {{ form.reply.label }} {{ form.reply(size=20) }}
   <input type=submit value=Odeslat>
 </form>
+
+<!--
+  workaround for running under an arbitrary URL prefix, e.g. the
+  JupyterLab proxy on jupyter.korpus.cz
+-->
+<script>
+var form = document.getElementById("form")
+form.action = window.location
+</script>
