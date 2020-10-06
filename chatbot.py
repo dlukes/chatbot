@@ -19,7 +19,7 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
-    replies = db.relationship("Turn", backref="user")
+    turns = db.relationship("Turn", backref="user")
 
 
 class Turn(db.Model):
@@ -56,12 +56,16 @@ def index():
         turn = Turn(text=reply, user=user, by_user=True)
         db.session.add(turn)
 
-    chatbot_turn = Turn(text=next_chatbot_turn(user.replies), user=user, by_user=False)
-    db.session.add(chatbot_turn)
+    if not user.turns or user.turns[-1].by_user:
+        # either the conversation is just starting, or the last turn was
+        # by the user -> generate the chatbot's next turn
+        chatbot_turn = Turn(
+            text=next_chatbot_turn(user.turns), user=user, by_user=False
+        )
+        db.session.add(chatbot_turn)
+
     db.session.commit()
-    return render_template(
-        "index.html", user=user.name, history=user.replies, form=form
-    )
+    return render_template("index.html", user=user.name, history=user.turns, form=form)
 
 
 def next_chatbot_turn(history):
