@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.secret_key = secrets.token_bytes(32)
 db_path = Path(__file__).parent / "chatbot.db"
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
@@ -28,6 +29,10 @@ class Turn(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     text = db.Column(db.Text, nullable=False)
+
+
+if not db_path.is_file():
+    db.create_all()
 
 
 class ChatForm(FlaskForm):
@@ -84,5 +89,5 @@ def next_chatbot_turn(history):
         return "Těžko říct, je to zapeklitá věc."
 
 
-if not db_path.is_file():
-    db.create_all()
+if __name__ == "__main__":
+    app.run(debug=True)

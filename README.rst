@@ -18,12 +18,11 @@ Running the app
 ---------------
 
 1. Open a terminal and navigate to the root directory of the project.
-2. Start a shell in the project's environment with ``poetry shell``.
-3. If on a Unix-like system (Linux, macOS, WSL), start the app with
-   ``FLASK_ENV=development FLASK_APP=chatbot flask run``. For additional
-   details and instructions for Windows, refer to Flask's `quickstart
-   docs <https://flask.palletsprojects.com/en/1.1.x/quickstart/>`_.
-4. The app will print a URL which you should enter into your browser,
+2. Start the web app with ``poetry run python chatbot.py``. See also
+   Flask's `quickstart docs
+   <https://flask.palletsprojects.com/en/1.1.x/quickstart/>`_ for
+   alternative instructions and troubleshooting.
+3. The app will print a URL which you should enter into your browser,
    typically something like http://127.0.0.1:5000 or
    http://localhost:5000.
 
