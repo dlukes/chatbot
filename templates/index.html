@@ -24,7 +24,7 @@ p.chatbot::before {
 {% endfor %}
 <form id="form" method=POST action=/>
   {{ form.csrf_token }}
-  {{ form.reply.label }} {{ form.reply(size=20) }}
+  {{ form.reply.label }} {{ form.reply(size=100, autofocus=True) }}
   <input type=submit value=Odeslat>
 </form>
 

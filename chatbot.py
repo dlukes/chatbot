@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import Flask, session, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField
+from wtforms import StringField
 from wtforms.validators import InputRequired
 
 
@@ -36,7 +36,7 @@ if not db_path.is_file():
 
 
 class ChatForm(FlaskForm):
-    reply = TextAreaField("Odpověď:", validators=[InputRequired()])
+    reply = StringField("Odpověď:", validators=[InputRequired()])
 
 
 @app.route("/", methods=("GET", "POST"))
