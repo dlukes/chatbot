@@ -85,8 +85,7 @@ def next_chatbot_turn(history):
         return "Já na otázky bohužel moc odpovídat neumím..."
     if "!" in last:
         return "Tak tak, sám bych to líp neřekl."
-    else:
-        return "Těžko říct, je to zapeklitá věc."
+    return "Těžko říct, je to zapeklitá věc."
 
 
 if __name__ == "__main__":
