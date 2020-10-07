@@ -48,7 +48,7 @@ def index():
     form = ChatForm()
     if form.validate_on_submit():
         # the user has submitted the form -> take note of their reply
-        reply = form.reply.data
+        reply = form.reply.data.strip()
         form = ChatForm(formdata=None)
         if user.name is None:
             user.name = reply
