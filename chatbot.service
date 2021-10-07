@@ -1,0 +1,20 @@
+[Unit]
+Description=Chatbot
+After=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Environment=SCRIPT_NAME=/flask
+# Just one worker because we auto-generate the security key on startup, which means
+# different workers would have different security keys and would keep resetting the
+# session cookie.
+ExecStart=/opt/pyenv/shims/poetry run gunicorn --bind 127.0.0.1:5000 --workers 1 --reload chatbot:app
+WorkingDirectory=/cnk/edu/python/zs21-22/chatbot
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+# vi: set ft=systemd:
